@@ -1,1 +1,1 @@
-# FCUDA MNIST Inference Accelerator
+# FCUDA Inference Accelerator
