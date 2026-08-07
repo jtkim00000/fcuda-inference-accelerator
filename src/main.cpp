@@ -23,9 +23,9 @@ int main()
 
     double t_initialization = 0.0;
 
-    const int num_iterations = 1;
+    const int num_iterations = 100000;
 
-    const int num_act = 2;
+    const int num_act = 512;
 
     std::cout << "Initializing Parameters . . . " << std::endl;
 
@@ -103,9 +103,7 @@ int main()
 
         t_output += std::chrono::duration<double>(t4 - t3).count();
 
-        for(int i = 0; i < (10*num_act); ++i) {
-            std::cout << A3[i] << ", " << std::endl;
-        }
+        delete[] X;
     }
 
     double t_loop_total = t_forward_prop + t_initialization_loop + t_output;
