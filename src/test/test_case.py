@@ -5,8 +5,9 @@ data = np.load('../../input/test_case.npz')
 X = data["test_case"]
 
 X = X.flatten()
-# with open("../../input/test_case.bin", "wb") as file:
-#         file.write(X)
+
+with open("../../input/test_case.bin", "wb") as file:
+        file.write(X)
 
 def col_operation(A, W, B):
     X = (W @ A) + B
@@ -38,6 +39,7 @@ def read_params():
 
 W1, B1, W2, B2, W3, B3 = read_params()
 
-Y = forward_prop(X, W1, B1, W2, B2, W3, B3)
+for i in range(2):
+    Y = forward_prop(X[(i * 784):(i * 784) + 784], W1, B1, W2, B2, W3, B3)
 
-print(Y)
+    print(Y)   

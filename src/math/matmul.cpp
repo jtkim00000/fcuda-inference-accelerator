@@ -14,9 +14,9 @@ void matmul(
         for(int col = 0; col < num_act; ++col) {
             float sum = 0.0f;
             for(int n = 0; n < n1; ++n) {
-                sum += weight[row * n1 + n] * activation[n * num_act + col];
+                sum += weight[row * n1 + n] * activation[col * n1 + n];
             }
-            next_activation[row * num_act + col] = sum + bias[row];
+            next_activation[col * n2 + row] = sum + bias[row];
         }
     }
 }

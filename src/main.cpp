@@ -25,6 +25,8 @@ int main()
 
     const int num_iterations = 1;
 
+    const int num_act = 2;
+
     std::cout << "Initializing Parameters . . . " << std::endl;
 
     const std::int32_t num_neur1 = 784;
@@ -53,9 +55,9 @@ int main()
     // ========================================
 
     float* X;
-    std::vector<float> A1(16, 0.0f);
-    std::vector<float> A2(16, 0.0f);
-    std::vector<float> A3(10, 0.0f);
+    std::vector<float> A1(16 * num_act, 0.0f);
+    std::vector<float> A2(16 * num_act, 0.0f);
+    std::vector<float> A3(10 * num_act, 0.0f);
 
     auto t1 = std::chrono::high_resolution_clock::now();
 
@@ -73,21 +75,21 @@ int main()
 
         auto t_loop_start = std::chrono::high_resolution_clock::now();
 
-        X = load_bin("../input/test_case.bin", 784);
+        X = load_bin("../input/test_case.bin", 784*num_act);
 
         auto t2 = std::chrono::high_resolution_clock::now();
 
-        matmul(X, W1, B1, A1.data(), 784, 16, 1);
+        matmul(X, W1, B1, A1.data(), 784, 16, num_act);
 
-        applySigmoid(A1.data(), 16);
+        applySigmoid(A1.data(), 16*num_act);
 
-        matmul(A1.data(), W2, B2, A2.data(), 16, 16, 1);
+        matmul(A1.data(), W2, B2, A2.data(), 16, 16, num_act);
 
-        applySigmoid(A2.data(), 16);
+        applySigmoid(A2.data(), 16*num_act);
 
-        matmul(A2.data(), W3, B3, A3.data(), 16, 10, 1);
+        matmul(A2.data(), W3, B3, A3.data(), 16, 10, num_act);
 
-        applySigmoid(A3.data(), 10);
+        applySigmoid(A3.data(), 10*num_act);
 
         auto t3 = std::chrono::high_resolution_clock::now();
 
@@ -101,7 +103,7 @@ int main()
 
         t_output += std::chrono::duration<double>(t4 - t3).count();
 
-        for(int i = 0; i < 10; ++i) {
+        for(int i = 0; i < (10*num_act); ++i) {
             std::cout << A3[i] << ", " << std::endl;
         }
     }
