@@ -3,6 +3,9 @@
 #include <chrono>
 
 #include "params/read_params.h"
+#include "math/activation_compressor.h"
+#include "math/matmul.h"
+
 
 int main()
 {
@@ -13,6 +16,12 @@ int main()
     std::cout << "==============================================" << std::endl;
 
     auto t0 = std::chrono::high_resolution_clock::now();
+
+    // ========================================
+    // INITIALIZING PARAMETERS
+    // ========================================
+
+    const int num_iterations = 1;
 
     std::cout << "Initializing Parameters . . . " << std::endl;
 
@@ -31,16 +40,62 @@ int main()
 
     W1 = load_bin("../input/w1.bin", (num_neur2 * num_neur1));
     W2 = load_bin("../input/w2.bin", (num_neur3 * num_neur2));
-    W3 = load_bin("../input/w3.bin", (num_neur4 * num_neur4));
+    W3 = load_bin("../input/w3.bin", (num_neur4 * num_neur3));
 
     B1 = load_bin("../input/b1.bin", num_neur2);
     B2 = load_bin("../input/b2.bin", num_neur3);
     B3 = load_bin("../input/b3.bin", num_neur4);
 
+    // ========================================
+    // INITIALIZING ACTIVATIONS & INPUT VECTOR
+    // ========================================
+
+    float* X;
+    std::vector<float> A1(16, 0.0f);
+    std::vector<float> A2(16, 0.0f);
+    std::vector<float> A3(10, 0.0f);
+
     auto t1 = std::chrono::high_resolution_clock::now();
 
-    for(int i = 0; i < 16; ++i) {
-        std::cout << B1[i] << std::endl;
+    // ========================================
+    // MAIN LOOP
+    // ========================================
+
+    double t_forward_prop = 0.0;
+    double t_initialization = 0.0;
+    double t_output = 0.0;
+
+    t_initialization += std::chrono::duration<double>(t1 - t0).count();
+    
+    for(int step = 0; step < num_iterations; ++step) {
+
+        auto t_loop_start = std::chrono::high_resolution_clock::now();
+
+        X = load_bin("../input/test_case.bin", 784);
+
+        auto t2 = std::chrono::high_resolution_clock::now();
+
+        matmul(X, W1, B1, A1.data(), 784, 16);
+
+        apply_sigmoid(A1.data(), 16);
+
+        matmul(A1.data(), W2, B2, A2.data(), 16, 16);
+
+        apply_sigmoid(A2.data(), 16);
+
+        matmul(A2.data(), W3, B3, A3.data(), 16, 10);
+
+        apply_sigmoid(A3.data(), 10);
+
+        auto t3 = std::chrono::high_resolution_clock::now();
+
+        t_initialization += std::chrono::duration<double>(t2 - t_loop_start).count();
+
+        t_forward_prop += std::chrono::duration<double>(t3 - t2).count();
+
+        std::cout << "Step: " << (step + 1) << "/" << num_iterations << std::endl;
+
+        auto t4 = std::chrono::high_resolution_clock::now();
     }
 
     return 0;

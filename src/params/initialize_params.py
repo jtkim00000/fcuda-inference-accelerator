@@ -9,13 +9,13 @@ def read_params():
     data = np.load('../../input/mnist_network_parameters.npz')
 
     W1 = data["W1"]
-    B1 = data["B1"]
+    B1 = data["B1"].flatten()
 
     W2 = data["W2"]
-    B2 = data["B2"]
+    B2 = data["B2"].flatten()
 
     W3 = data["W3"]
-    B3 = data["B3"]
+    B3 = data["B3"].flatten()
 
     return W1, B1, W2, B2, W3, B3
 
