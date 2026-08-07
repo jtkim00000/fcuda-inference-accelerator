@@ -23,7 +23,7 @@ int main()
 
     double t_initialization = 0.0;
 
-    const int num_iterations = 1000000;
+    const int num_iterations = 1;
 
     std::cout << "Initializing Parameters . . . " << std::endl;
 
@@ -77,17 +77,17 @@ int main()
 
         auto t2 = std::chrono::high_resolution_clock::now();
 
-        matmul(X, W1, B1, A1.data(), 784, 16);
+        matmul(X, W1, B1, A1.data(), 784, 16, 1);
 
-        apply_sigmoid(A1.data(), 16);
+        applySigmoid(A1.data(), 16);
 
-        matmul(A1.data(), W2, B2, A2.data(), 16, 16);
+        matmul(A1.data(), W2, B2, A2.data(), 16, 16, 1);
 
-        apply_sigmoid(A2.data(), 16);
+        applySigmoid(A2.data(), 16);
 
-        matmul(A2.data(), W3, B3, A3.data(), 16, 10);
+        matmul(A2.data(), W3, B3, A3.data(), 16, 10, 1);
 
-        apply_sigmoid(A3.data(), 10);
+        applySigmoid(A3.data(), 10);
 
         auto t3 = std::chrono::high_resolution_clock::now();
 
@@ -100,6 +100,10 @@ int main()
         auto t4 = std::chrono::high_resolution_clock::now();
 
         t_output += std::chrono::duration<double>(t4 - t3).count();
+
+        for(int i = 0; i < 10; ++i) {
+            std::cout << A3[i] << ", " << std::endl;
+        }
     }
 
     double t_loop_total = t_forward_prop + t_initialization_loop + t_output;
