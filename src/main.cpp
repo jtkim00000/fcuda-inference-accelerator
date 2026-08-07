@@ -11,9 +11,9 @@ int main()
 {
     auto program_start = std::chrono::high_resolution_clock::now();
 
-    std::cout << "==============================================" << std::endl;
-    std::cout << "   Jesse's CUDA MNIST INFERENCE ACCELERATOR   " << std::endl;
-    std::cout << "==============================================" << std::endl;
+    std::cout << "==================================================" << std::endl;
+    std::cout << "     Jesse's CUDA MNIST INFERENCE ACCELERATOR     " << std::endl;
+    std::cout << "==================================================" << std::endl;
 
     auto t0 = std::chrono::high_resolution_clock::now();
 
@@ -21,7 +21,9 @@ int main()
     // INITIALIZING PARAMETERS
     // ========================================
 
-    const int num_iterations = 1;
+    double t_initialization = 0.0;
+
+    const int num_iterations = 1000000;
 
     std::cout << "Initializing Parameters . . . " << std::endl;
 
@@ -57,15 +59,15 @@ int main()
 
     auto t1 = std::chrono::high_resolution_clock::now();
 
+    t_initialization += std::chrono::duration<double>(t1 - t0).count();
+
     // ========================================
     // MAIN LOOP
     // ========================================
 
     double t_forward_prop = 0.0;
-    double t_initialization = 0.0;
+    double t_initialization_loop = 0.0;
     double t_output = 0.0;
-
-    t_initialization += std::chrono::duration<double>(t1 - t0).count();
     
     for(int step = 0; step < num_iterations; ++step) {
 
@@ -89,14 +91,43 @@ int main()
 
         auto t3 = std::chrono::high_resolution_clock::now();
 
-        t_initialization += std::chrono::duration<double>(t2 - t_loop_start).count();
+        t_initialization_loop += std::chrono::duration<double>(t2 - t_loop_start).count();
 
         t_forward_prop += std::chrono::duration<double>(t3 - t2).count();
 
         std::cout << "Step: " << (step + 1) << "/" << num_iterations << std::endl;
 
         auto t4 = std::chrono::high_resolution_clock::now();
+
+        t_output += std::chrono::duration<double>(t4 - t3).count();
     }
+
+    double t_loop_total = t_forward_prop + t_initialization_loop + t_output;
+
+    auto t5 = std::chrono::high_resolution_clock::now();
+
+    double t_total = std::chrono::duration<double>(t5 - t0).count();
+
+    // ========================================
+    // OUTPUT DATA
+    // ========================================
+
+    std::cout << "==================================================" << std::endl;
+    std::cout << "                Profiling Results                 " << std::endl;
+    std::cout << "==================================================" << std::endl;
+
+    std::cout << "  1. Parameter Initialization: " << t_initialization << std::endl;
+    std::cout << "  2. Input Initialization:     " << t_initialization_loop << std::endl;
+    std::cout << "  3. Forward Propagation:      " << t_forward_prop << std::endl;
+    std::cout << "  4. Output:                   " << t_output << std::endl;
+
+    std::cout << "==================================================" << std::endl;
+    std::cout << "  Main Loop Runtime:           " << t_loop_total << std::endl;
+    std::cout << "  Full Program Runtime:        " << t_total << std::endl;
+    std::cout << "==================================================" << std::endl;
+
+
+
 
     return 0;
 }
