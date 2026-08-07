@@ -125,9 +125,6 @@ int main()
     std::cout << "  Main Loop Runtime:           " << t_loop_total << std::endl;
     std::cout << "  Full Program Runtime:        " << t_total << std::endl;
     std::cout << "==================================================" << std::endl;
-
-
-
-
+    
     return 0;
 }
