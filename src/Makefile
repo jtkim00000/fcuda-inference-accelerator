@@ -1,18 +1,39 @@
+CXX  = g++-13
+NVCC = nvcc
 
-execute: main.o read_params.o activation_compressor.o matmul.o
-	g++-13 main.o read_params.o activation_compressor.o matmul.o -o execute
+CXXFLAGS  = -O3 -std=c++17 -Wall
+NVCCFLAGS = -O3 -std=c++17 -arch=sm_89
+
+TARGET = execute
+
+CPP_OBJ = \
+	main.o \
+	params/read_params.o
+
+CUDA_OBJ = \
+	math/matmul.o \
+	math/activation_compressor.o
+
+OBJ = $(CPP_OBJ) $(CUDA_OBJ)
+
+all: $(TARGET)
 
 main.o: main.cpp
-	g++-13 -c main.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-read_params.o: params/read_params.cpp params/read_params.h
-	g++-13 -c params/read_params.cpp
+params/read_params.o: params/read_params.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-activation_compressor.o: math/activation_compressor.cpp math/activation_compressor.h
-	g++-13 -c math/activation_compressor.cpp
+math/matmul.o: math/matmul.cu
+	$(NVCC) $(NVCCFLAGS) -c $< -o $@
 
-matmul.o: math/matmul.cpp math/matmul.h
-	g++-13 -c math/matmul.cpp
+math/activation_compressor.o: math/activation_compressor.cu
+	$(NVCC) $(NVCCFLAGS) -c $< -o $@
+
+$(TARGET): $(OBJ)
+	$(NVCC) $(NVCCFLAGS) $(OBJ) -o $@
 
 clean:
-	rm *.o execute
+	rm -f $(OBJ) $(TARGET)
+
+.PHONY: all clean

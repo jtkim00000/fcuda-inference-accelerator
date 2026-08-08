@@ -1,5 +1,4 @@
-
-
+#pragma once
 
 void applySigmoid(float* activation, const int N);
 

@@ -1,0 +1,15 @@
+==================================================
+                Profiling Results
+==================================================
+  1. Parameter Initialization: 0.000106572
+  2. Input Initialization:     1.57196
+  3. Device MemAlloc:          0.252883
+  4. Forward Propagation:      10.9357
+  5. PCIe Transfers:           6.01609
+      5a. Host to Device:      1.44488
+      5b. Device to Host:      4.57121
+  6. Output:                   2.08295
+==================================================
+  Main Loop Runtime:           20.6067
+  Full Program Runtime:        20.888
+==================================================

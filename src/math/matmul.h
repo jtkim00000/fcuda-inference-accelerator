@@ -1,4 +1,4 @@
-
+#pragma once
 
 void matmul(
     const float* activation, 
@@ -16,5 +16,6 @@ void matmulGPU(
     const float* bias, 
     float* next_activation, 
     const int n1, 
-    const int n2
+    const int n2,
+    const int num_act
 );
