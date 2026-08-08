@@ -39,7 +39,7 @@ data = sorted(zip(components, runtimes, colors), key=lambda item: item[1])
 sorted_components, sorted_runtimes, sorted_colors = zip(*data)
 
 # Create figure
-fig, ax = plt.subplots(figsize=(10, 6))
+fig, ax = plt.subplots(figsize=(12, 6))
 
 # Horizontal bar chart
 bars = ax.barh(sorted_components, sorted_runtimes, color=sorted_colors, edgecolor='black', alpha=0.85)

@@ -65,6 +65,8 @@ gpu_tr = [
     45.6336
 ]
 
+plt.subplots(figsize=(12, 6))
+
 x_label = "# of Inferences Running in Parallel (log2(X))"
 y_label = "Throughput (Total # of Inferences Computed / Runtime)"
 plot_title = "CUDA Forward Propagation Accelerator Profiling"
@@ -83,10 +85,10 @@ for i in range(len(gpu_tr)):
 for i in range(len(x)):
     x[i] = math.log2(x[i])
 
-plt.plot(x, cpu_fp, marker='o', color='#1f77b4', linestyle='-', linewidth=2, markersize=8, label='CPU Forward Propagation')
-# plt.plot(x, cpu_tr, marker='o', color='#ff7f0e', linestyle='-', linewidth=2, markersize=8, label='CPU Total Runtime')
-plt.plot(x, gpu_fp, marker='o', color='#2ca02c', linestyle='-', linewidth=2, markersize=8, label='GPU Forward Propagation')
-# plt.plot(x, gpu_tr, marker='o', color='#d62728', linestyle='-', linewidth=2, markersize=8, label='GPU Total Runtime')
+# plt.plot(x, cpu_fp, marker='o', color='#1f77b4', linestyle='-', linewidth=2, markersize=8, label='CPU Forward Propagation')
+plt.plot(x, cpu_tr, marker='o', color='#ff7f0e', linestyle='-', linewidth=2, markersize=8, label='CPU Total Runtime')
+# plt.plot(x, gpu_fp, marker='o', color='#2ca02c', linestyle='-', linewidth=2, markersize=8, label='GPU Forward Propagation')
+plt.plot(x, gpu_tr, marker='o', color='#d62728', linestyle='-', linewidth=2, markersize=8, label='GPU Total Runtime')
 
 # Formatting
 plt.xlabel(x_label, fontsize=12)

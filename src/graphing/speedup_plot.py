@@ -81,6 +81,8 @@ for i in range(len(cpu_fp)):
 for i in range(len(x)):
     x[i] = math.log2(x[i])
 
+plt.subplots(figsize=(12, 6))
+
 plt.plot(x, speedup_fp, marker='o', color='#1f77b4', linestyle='-', linewidth=2, markersize=8, label='Forward Propagation Speedup')
 plt.plot(x, speedup_tr, marker='o', color='#ff7f0e', linestyle='-', linewidth=2, markersize=8, label='Total Runtime Speedup')
 
