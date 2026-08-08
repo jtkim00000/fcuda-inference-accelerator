@@ -16,7 +16,7 @@ The forward propagation code was built for my MNIST Neural Network (NN). For any
 For my implementation, the NN also includes 2 hidden layers containing 16 neurons each. The choice of the number of hidden layers and the number of neurons in each layer was mostly arbitrary, as for this project I am aiming for an analysis of maximum throughput rather than optimizing numerical accuracy. 
 
 ## CUDA Kernels
-In any given forward propagation/inference operation for this NN, the computation simply consists of a matrix multiply, an addition, and applying sigmoid activation function. We then repeat this process 3 times and we are left with receive 10 output neuron activations. 
+In any given forward propagation/inference operation for this NN, the computation simply consists of a matrix multiply, an addition, and applying sigmoid activation function. We then repeat this process 3 times and we are left with 10 output neuron activations. 
 
 The output of a fully connected layer can be expressed as a matrix multiplication between the weight matrix and the input activations, followed by the addition of a bias vector:
 
@@ -32,7 +32,7 @@ $$
 \sigma(x) = \frac{1}{1 + e^{-x}}
 $$
 
-In this case the function squishes all inputs $x$ into outputs $0 < y < 0$
+In this case the function squishes all inputs $x$ into outputs $0 < y < 1$
 
 Since these are the only two operations needed, the corresponding CUDA kernels are relatively simple. For adding the bias and apply the sigmoid, we simply apply a thread to each activation in a given layer. When running multiple inferences in parallel we simply need to make a choice of how to store these extra activations. In my case I decided to go with row-major order since it doesn't complicate the existing design. You can view the completed kernel at `src/math/activation_compressor.cu`.
 
