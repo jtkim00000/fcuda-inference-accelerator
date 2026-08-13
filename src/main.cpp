@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <chrono>
+#include <cstring>
 
 #include "params/read_params.h"
 #include "math/activation_compressor.h"
@@ -25,7 +26,7 @@ int main()
 
     const int num_iterations = 100000;
 
-    const int num_act = 512;
+    const int num_act = 1024;
 
     std::cout << "Initializing Parameters . . . " << std::endl;
 
@@ -75,7 +76,17 @@ int main()
 
         auto t_loop_start = std::chrono::high_resolution_clock::now();
 
-        X = load_bin("../input/test_case.bin", 784*num_act);
+        int half_size = (784 * num_act) / 2;
+
+        float* X_half = load_bin("../input/test_case.bin", half_size);
+
+        X = new float[2 * half_size];
+
+        std::memcpy(X, X_half, half_size * sizeof(float));
+        std::memcpy(X + half_size, X_half, half_size * sizeof(float));
+
+        delete[] X_half;
+
 
         auto t2 = std::chrono::high_resolution_clock::now();
 
